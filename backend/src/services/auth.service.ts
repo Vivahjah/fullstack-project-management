@@ -13,13 +13,22 @@ import MemberModel from "../models/member.model";
 import { ProviderEnum } from "../enums/account-provider.enum";
 import { Roles } from "../enums/roles.enums";
 
-export const loginOrCreateAccountService = async (data: {
-  provider: string;
-  displayName: string;
-  providerId: string;
-  picture?: string;
+interface IRegisterUserProps {
+  email: string;
+  name: string;
+  password: string;
+
+}
+interface ILoginUserProps {
   email?: string;
-}) => {
+  picture?: string;
+  displayName?: string;
+  provider: string;
+  providerId: string;
+
+}
+
+export const loginOrCreateAccountService = async (data: ILoginUserProps) => {
   const { providerId, provider, displayName, email, picture } = data;
 
   const session = await mongoose.startSession();
@@ -87,11 +96,7 @@ export const loginOrCreateAccountService = async (data: {
   }
 };
 
-export const registerUserService = async (body: {
-  email: string;
-  name: string;
-  password: string;
-}) => {
+export const registerUserService = async (body: IRegisterUserProps) => {
   const { email, name, password } = body;
   const session = await mongoose.startSession();
 
@@ -155,7 +160,6 @@ export const registerUserService = async (body: {
   } catch (error) {
     await session.abortTransaction();
     session.endSession();
-
     throw error;
   }
 };

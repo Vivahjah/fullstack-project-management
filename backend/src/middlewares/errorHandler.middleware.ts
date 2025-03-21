@@ -6,10 +6,11 @@ import { ErrorCodeEnum } from "../enums/error-codes.enums";
 
 
 const formatZodError = (res: Response, error: z.ZodError) => {
-  const errors = error?.issues?.map((err) => ({
+  const errors = error?.issues?.map((err) => ({  
     field: err.path.join("."),
     message: err.message,
   }));
+ 
   return res.status(HTTPSTATUS.BAD_REQUEST).json({
     message: "Validation failed",
     errors: errors,
